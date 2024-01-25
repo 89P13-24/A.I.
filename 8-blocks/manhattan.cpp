@@ -27,8 +27,8 @@ int main()
 {
     clock_t start,endt;
 //	vector<int> v{4,6,5,2,7,8,1,0,3};
-    vector<int> g{1,2,3,4,5,6,7,8,0};
-    vector<int> v{0,1,2,3,4,5,6,7,8};
+    vector<int> g{0,1,2,3,4,5,6,7,8};
+    vector<int> v{7,2,4,5,0,6,8,3,1};
 	int cc = 0;
 	vector<vector<int>> start_states(10,vector<int>(9)) ;
 	while(cc<10){
