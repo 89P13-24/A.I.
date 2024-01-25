@@ -5,6 +5,7 @@ struct state{
 public :
     vector<int> s;
     int distance;
+    int depth ;
     bool operator>(const state& other) const{
         return distance > other.distance;
     }
@@ -37,6 +38,7 @@ int closed(vector<int> &v,vector<vector<int>> &soln){
 
 int main()
 {
+    clock_t start,endt;
 	//cout<<"Enter 0 for empty space"<<"\n";
 	vector<int> g{1,2,3,8,0,4,7,6,5},v{1,6,7,2,0,3,8,5,4};
     // g{1,2,3,4,5,6,7,8,0}
@@ -86,10 +88,12 @@ int main()
 //	state* st = new state;
 //	st->s = v;
 //	st->distance = No_misplaced_tile(v,g);
+    start = clock();
     priority_queue<state,vector<state>,greater<state>> q;
     state st,temp;
     st.s = v;
-    st.distance = No_misplaced_tile(v,g);
+    st.depth = 0;
+    st.distance = No_misplaced_tile(v,g)+0;
     q.push(st);
 	//queue<vector<int>> q;
 	//q.push(v);
@@ -97,11 +101,12 @@ int main()
 	vector<vector<int>> done;
 	//vector<int> temp;
 	int c =0;
+	int f = 1;
 	while(!q.empty() && c<100000){
         temp = q.top();
         q.pop();
-        soln.push_back(temp.s);
-
+        print_2D(3,temp.s);
+        cout<<temp.depth<<endl;
         if(!No_misplaced_tile(temp.s,g)){
             break;
         }
@@ -117,13 +122,20 @@ int main()
 //            temp->distance = No_misplaced_tile(i,g);
             state z;
             z.s = i;
-            z.distance = No_misplaced_tile(i,g);
+            z.distance = No_misplaced_tile(i,g)+temp.depth;
+            z.depth = temp.depth + 1;
             q.push(z);
+            f++;
         }
         c++;
 	}
-    print_solution(soln,3);
-    cout<<c<<endl;
+	endt = clock();
+	double time_taken = double(endt - start) / double(CLOCKS_PER_SEC);
+   cout<<"No. of states visited : "<<c<<endl;
+    cout<<"No. of nodes removed from the Frontier : "<<f-c<<endl;
+     cout << "Time taken by program is : " << fixed
+         << time_taken << setprecision(5);
+    cout << " sec " << endl;
 }
 
 
@@ -226,5 +238,3 @@ void print_solution(vector<vector<int>> &v,int n){
         print_2D(n,i);
     }
 }
-
-
