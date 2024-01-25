@@ -5,6 +5,7 @@ struct state{
 public :
     vector<int> s;
     int distance;
+    int depth;
     bool operator>(const state& other) const{
         return distance > other.distance;
     }
@@ -25,14 +26,14 @@ int closed(vector<int> &v,vector<vector<int>> &soln);
 int main()
 {
     clock_t start,endt;
-	vector<int> v{4,6,5,2,7,8,1,0,3};
+//	vector<int> v{4,6,5,2,7,8,1,0,3};
     vector<int> g{1,2,3,4,5,6,7,8,0};
-    //vector<int> v{0,1,2,3,4,5,6,7,8};
+    vector<int> v{0,1,2,3,4,5,6,7,8};
 	int cc = 0;
 	vector<vector<int>> start_states(10,vector<int>(9)) ;
 	while(cc<10){
         //shuffle(g.begin(),g.end(),default_random_engine(time(0)));
-        shuffle(v.begin(),v.end(),default_random_engine(time(0)));
+        //shuffle(v.begin(),v.end(),default_random_engine(time(0)));
         start_states[cc] = v;
         cc++;
 	}
@@ -53,9 +54,10 @@ int main()
     int c =0;
     state st,temp;
     st.s = start_states[0];
-    st.distance = manhattan(3,v,g);
+    st.depth = 0;
+    st.distance = manhattan(3,v,g) +0;
     q.push(st);
-
+    int f =1;
 	vector<vector<int>> soln;
 	vector<vector<int>> done;
 
@@ -63,7 +65,8 @@ int main()
 	while(!q.empty() && c<100000){
         temp = q.top();
         q.pop();
-        soln.push_back(temp.s);
+        print_2D(3,temp.s);
+        cout<<temp.depth<<endl;
 
         if(!No_misplaced_tile(temp.s,g)){
             break;
@@ -79,17 +82,19 @@ int main()
 
             state z;
             z.s = i;
-            z.distance = manhattan(3,i,g);
+            z.distance = manhattan(3,i,g)+temp.depth;
+            z.depth = temp.depth+1;
             q.push(z);
+            f++;
         }
         c++;
 	}
 	endt = clock();
 	double time_taken = double(endt - start) / double(CLOCKS_PER_SEC);
 
-    print_solution(soln,3);
+    //print_solution(soln,3);
     cout<<"No. of states visited : "<<c<<endl;
-    cout<<"No. of nodes removed from the Frontier : "<<q.size()-c<<endl;
+    cout<<"No. of nodes removed from the Frontier : "<<f-c<<endl;
      cout << "Time taken by program is : " << fixed
          << time_taken << setprecision(5);
     cout << " sec " << endl;
@@ -245,4 +250,3 @@ int closed(vector<int> &v,vector<vector<int>> &soln){
     }
     return flag;
 }
-
