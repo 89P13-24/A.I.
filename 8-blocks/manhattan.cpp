@@ -40,12 +40,12 @@ int main()
 {
 	//cout<<"Enter 0 for empty space"<<"\n";
 	//vector<int> g{1,2,3,8,0,4,7,6,5};
-	vector<int> v{8,1,3,4,0,2,7,6,5};
+	vector<int> v{4,6,5,2,7,8,1,0,3};
     vector<int> g{1,2,3,4,5,6,7,8,0};
 	//cout<<"Enter start state"<<"\n";,
 	//for(int i=0;i<9;i++) cin>>v[i];
 	//cout<<"Enter goal state"<<"\n";
-	//int c = 0;
+	int cc = 0;
 //
 //	for(int i=0;i<9;i++){
 //	    v[i] = i;
@@ -53,15 +53,15 @@ int main()
 //	}
 //	g[8] = 0;
 	//g1 = v;
-//	vector<vector<int>> start_states(10,vector<int>(9)) ;
+	vector<vector<int>> start_states(10,vector<int>(9)) ;
 //	vector<vector<int>> goal_states(10,vector<int>(9)) ;
-//	while(c<10){
-//        shuffle(g.begin(),g.end(),default_random_engine(time(0)));
-//        shuffle(v.begin(),v.end(),default_random_engine(time(0)));
-//        start_states[c] = v;
-//        goal_states[c] = g;
-//        c++;
-//	}
+	while(cc<10){
+        //shuffle(g.begin(),g.end(),default_random_engine(time(0)));
+        shuffle(v.begin(),v.end(),default_random_engine(time(0)));
+        start_states[cc] = v;
+        //goal_states[c] = g;
+        cc++;
+	}
 //	int ans = 0;
 //    print_2D(3,v);
 //    print_2D(3,g);
@@ -80,7 +80,7 @@ int main()
 //	swap(g1[0],g1[1]);
 //	print_state(g1);
 	//cout<<ans<<endl;
-    print_state(v);
+    print_state(start_states[1]);
     print_state(g);
     if(!solvable_odd(v,g)){
         cout<<"NOT SOLVABLE"<<endl;
@@ -95,8 +95,8 @@ int main()
     priority_queue<state,vector<state>,greater<state>> q;
     int c =0;
     state st,temp;
-    st.s = v;
-    st.distance = No_misplaced_tile(v,g);
+    st.s = start_states[1];
+    st.distance = manhattan(3,v,g);
     q.push(st);
 	//queue<vector<int>> q;
 	//q.push(v);
@@ -124,7 +124,7 @@ int main()
 //            temp->distance = No_misplaced_tile(i,g);
             state z;
             z.s = i;
-            z.distance = No_misplaced_tile(i,g);
+            z.distance = manhattan(3,i,g);
             q.push(z);
         }
         c++;
@@ -262,5 +262,4 @@ void print_solution(vector<vector<int>> &v,int n){
         print_2D(n,i);
     }
 }
-
 
