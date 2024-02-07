@@ -384,7 +384,7 @@ void A_using_manhattan(int n,vector<int> &v,vector<int> &g){
     //print_solution(soln,3);
     printl(temp,soln,temp.depth);
     cout<<"No. of steps to reach the solution : "<<temp.depth<<endl;
-    cout<<"No. of nodes removed from the Frontier : "<<f-c<<endl;
+    cout<<"No. of nodes removed from the Frontier : "<<c<<endl;
      cout << "Time taken by program is : " << fixed
          << time_taken << setprecision(5);
     cout << " sec " << endl;
@@ -437,7 +437,7 @@ void A_using_hamming(int n,vector<int> &v,vector<int> &g){
     //print_solution(soln,3);
     printl(temp,soln,temp.depth);
     cout<<"No. of steps to reach the solution : "<<temp.depth<<endl;
-    cout<<"No. of nodes removed from the Frontier : "<<f-c<<endl;
+    cout<<"No. of nodes removed from the Frontier : "<<c<<endl;
      cout << "Time taken by program is : " << fixed
          << time_taken << setprecision(5);
     cout << " sec " << endl;
@@ -457,7 +457,7 @@ void A_using_Linear_Conflict(int n,vector<int> &v,vector<int> &g){
     q.push(st);
 
 	vector<state> soln;
-	map<string,int> done;
+	unordered_map<string,int> done;
     int f =1;
 
 	while(!q.empty() && c<100000){
@@ -491,7 +491,7 @@ void A_using_Linear_Conflict(int n,vector<int> &v,vector<int> &g){
     //print_solution(soln,3);
     printl(temp,soln,temp.depth);
     cout<<"No. of steps to reach the solution : "<<temp.depth<<endl;
-    cout<<"No. of nodes removed from the Frontier : "<<f-c<<endl;
+    cout<<"No. of nodes removed from the Frontier : "<<c<<endl;
      cout << "Time taken by program is : " << fixed
          << time_taken << setprecision(5);
     cout << " sec " << endl;
