@@ -29,6 +29,15 @@ void A_using_manhattan(int n,vector<int> &v,vector<int> &g);
 void A_using_hamming(int n,vector<int> &v,vector<int> &g);
 void A_using_Linear_Conflict(int n,vector<int> &v,vector<int> &g);
 void A_star(string x,vector<int> &v,vector<int> &g,int n);
+string stv(vector<int> &v){
+    int s =v.size();
+    string ans ="";
+    for(int i=0;i<s;i++){
+        ans+=to_string(v[i]);
+    }
+    return ans;
+}
+
 int main()
 {
 	vector<int> v{7,2,4,5,0,6,8,3,1};
@@ -339,7 +348,7 @@ void A_using_manhattan(int n,vector<int> &v,vector<int> &g){
     st.pindex = -1;
     st.heuristics = manhattan(3,v,g)+0;
     q.push(st);
-
+    unordered_map<string,int> ms;
 	vector<state> soln;
 	vector<vector<int>> done;
     int f =1;
@@ -350,13 +359,13 @@ void A_using_manhattan(int n,vector<int> &v,vector<int> &g){
         soln.push_back(temp);
         if(temp.s == g)
             break;
-        if(closed(temp.s,done) == 0){
+        if(ms[stv(temp.s)]){
             continue;
         }
-        done.push_back(temp.s);
+        ms[stv(temp.s)]++;
         vector<vector<int>> ngh = neighbors(3,temp.s);
         for(auto i : ngh){
-            if(closed(i,done) == 0)
+            if(ms[stv(i)])
                continue;
 
             state z;
@@ -394,27 +403,27 @@ void A_using_hamming(int n,vector<int> &v,vector<int> &g){
     q.push(st);
 
 	vector<state> soln;
-	vector<vector<int>> done;
+	unordered_map<string,int> done;
     int f =1;
 
-	while(!q.empty() ){
+	while(!q.empty()){
         temp = q.top();
         q.pop();
         soln.push_back(temp);
         if(temp.s == g)
             break;
-        if(closed(temp.s,done) == 0){
+        if(done[stv(temp.s)]){
             continue;
         }
-        done.push_back(temp.s);
+        done[stv(temp.s)]++;
         vector<vector<int>> ngh = neighbors(3,temp.s);
         for(auto i : ngh){
-            if(closed(i,done) == 0)
+            if(done[stv(i)])
                continue;
 
             state z;
             z.s = i;
-            z.heuristics = manhattan(n,i,g) + temp.depth;
+            z.heuristics = No_misplaced_tile(i,g) + temp.depth;
             z.depth = temp.depth+1;
             z.pindex = soln.size()-1;
             q.push(z);
@@ -448,7 +457,7 @@ void A_using_Linear_Conflict(int n,vector<int> &v,vector<int> &g){
     q.push(st);
 
 	vector<state> soln;
-	vector<vector<int>> done;
+	map<string,int> done;
     int f =1;
 
 	while(!q.empty() && c<100000){
@@ -457,13 +466,13 @@ void A_using_Linear_Conflict(int n,vector<int> &v,vector<int> &g){
         soln.push_back(temp);
         if(temp.s == g)
             break;
-        if(closed(temp.s,done) == 0){
+        if(done[stv(temp.s)]){
             continue;
         }
-        done.push_back(temp.s);
+        done[stv(temp.s)]++;
         vector<vector<int>> ngh = neighbors(3,temp.s);
         for(auto i : ngh){
-            if(closed(i,done) == 0)
+            if(done[stv(i)])
                continue;
 
             state z;
