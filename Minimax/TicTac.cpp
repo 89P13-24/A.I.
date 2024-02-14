@@ -224,6 +224,9 @@ void printt_board(vector<vector<int>> v){
 
 int main()
 {
+    clock_t start,endt;
+    int ct=0;
+    double total_time=0;
     cout<<"Initial Board :-"<<endl;
 
     int mv = 0;
@@ -241,7 +244,12 @@ int main()
     cin>>d;
 
     if(choice == "No"){
+        start = clock();
         best_move(v,d);
+        endt = clock();
+        double time_taken = double(endt - start) / double(CLOCKS_PER_SEC);
+        total_time+=time_taken;
+        ct++;
         print_board(v);
         mv++;
     }
@@ -272,7 +280,12 @@ int main()
         mv++;
         if(mv == 9) break;
         cout<<"Board after computer plays"<<endl;
+        start = clock();
         best_move(v,d);
+        endt = clock();
+        double time_taken = double(endt - start) / double(CLOCKS_PER_SEC);
+        total_time+=time_taken;
+        ct++;
         mv++;
         print_board(v);
         result = winner(v);
@@ -283,4 +296,7 @@ int main()
         }
     }
     if(flag) cout<<"Game is Tied"<<endl;
+    cout << endl<<"Average time taken by program to make moves is : " << fixed
+         << total_time/ct << setprecision(5);
+    cout << " sec " << endl;
 }
