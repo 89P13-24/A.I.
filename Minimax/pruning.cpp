@@ -2,11 +2,11 @@
 #include <algorithm>
 #include <vector>
 #include <array>
-
+#include <bits/stdc++.h>
 using std::cout;
 using std::cin;
 using std::endl;
-
+using namespace std;
 #define WIN 1000
 #define	DRAW 0
 #define LOSS -1000
@@ -287,6 +287,9 @@ bool game_is_done(char board[3][3])
 
 int main()
 {
+    clock_t start,endt;
+    double total_time = 0;
+    int ct = 0;
 	char board[3][3] = { EMPTY_SPACE };
 
 	cout << "********************************\n\n\tTic Tac Toe AI\n\n********************************" << endl << endl;
@@ -296,8 +299,12 @@ int main()
     cout<<"Do you want to play first:-(y/n)"<<endl;
     cin>>choice;
     if(choice == "n"){
+        start = clock();
         std::pair<int, std::pair<int, int>> ai_move = minimax_optimization(board, AI_MARKER, START_DEPTH, LOSS, WIN);
-
+        endt = clock();
+        double time_taken = double(endt - start) / double(CLOCKS_PER_SEC);
+        total_time+=time_taken;
+        ct++;
 		board[ai_move.second.first][ai_move.second.second] = AI_MARKER;
 
 		print_board(board);
@@ -322,11 +329,13 @@ int main()
 		{
 			board[row][col] = PLAYER_MARKER;
 		}
-
+        start = clock();
 		std::pair<int, std::pair<int, int>> ai_move = minimax_optimization(board, AI_MARKER, START_DEPTH, LOSS, WIN);
-
+        endt = clock();
+        double time_taken = double(endt - start) / double(CLOCKS_PER_SEC);
+        total_time+=time_taken;
 		board[ai_move.second.first][ai_move.second.second] = AI_MARKER;
-
+        ct++;
 		print_board(board);
 	}
 
@@ -335,8 +344,9 @@ int main()
 	int player_state = get_board_state(board, PLAYER_MARKER);
 
 	cout << "PLAYER "; print_game_state(player_state);
-
+    cout << "Average time taken by program to make moves is : " << fixed
+         << total_time/ct << setprecision(5);
+    cout << " sec " << endl;
 	return 0;
 
 }
-
