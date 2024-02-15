@@ -184,6 +184,55 @@ int minimax(vector<vector<int>> v,int depth,bool maximizing){
     }
 }
 
+int minimax_using_alpha_beta(vector<vector<int>> v,int depth,bool maximizing,int alpha,int beta){
+    int result = winner(v);
+    if(result !=0){
+        return result*100;
+    }
+    if(result == 0 && !is_board_empty(v))
+        return 0;
+    if(depth ==0){
+        if(maximizing)return evaluation_func(v,1);
+        else return evaluation_func(v,-1);
+    }
+    if(maximizing){
+        int bestscore = INT_MIN;
+        int score;
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                if(v[i][j] == 0){
+                    v[i][j] =1;
+                    score = minimax_using_alpha_beta(v,depth-1,false,alpha,beta);
+                    bestscore=max(score,bestscore);
+                    alpha = max(alpha,bestscore);
+                    v[i][j] = 0;
+                    if(beta <= alpha)
+                        return bestscore;
+                }
+            }
+        }
+        return bestscore;
+    }else{
+        int bestscore = INT_MAX;
+        int score;
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                if(v[i][j] == 0){
+                    v[i][j] = -1;
+                    score = minimax_using_alpha_beta(v,depth-1,true,alpha,beta);
+                    bestscore = min(score,bestscore);
+                    beta = min(bestscore,beta);
+                    v[i][j] = 0;
+                    if(beta <= alpha)
+                        return bestscore;
+                }
+            }
+        }
+        return bestscore;
+    }
+}
+
+
 
 void best_move(vector<vector<int>> &v,int depth){
     int bestscore = INT_MIN;
@@ -194,6 +243,28 @@ void best_move(vector<vector<int>> &v,int depth){
             if(v[i][j] == 0){
                 v[i][j] = 1;
                 score = minimax(v,depth-1,false);
+                if(score > bestscore){
+                    x=i;
+                    y=j;
+                    bestscore= score;
+                }
+                v[i][j] = 0;
+            }
+        }
+    }
+    v[x][y] = 1;
+}
+
+
+void best_move_pruning(vector<vector<int>> &v,int depth){
+    int bestscore = INT_MIN;
+    int score;
+    int x,y;
+    for(int i=0;i<3;i++){
+        for(int j=0;j<3;j++){
+            if(v[i][j] == 0){
+                v[i][j] = 1;
+                score = minimax_using_alpha_beta(v,depth-1,false,INT_MIN,INT_MAX);
                 if(score > bestscore){
                     x=i;
                     y=j;
@@ -245,7 +316,8 @@ int main()
 
     if(choice == "No"){
         start = clock();
-        best_move(v,d);
+        //best_move(v,d);
+        best_move_pruning(v,d);
         endt = clock();
         double time_taken = double(endt - start) / double(CLOCKS_PER_SEC);
         total_time+=time_taken;
@@ -281,7 +353,8 @@ int main()
         if(mv == 9) break;
         cout<<"Board after computer plays"<<endl;
         start = clock();
-        best_move(v,d);
+        //best_move(v,d);
+        best_move_pruning(v,d);
         endt = clock();
         double time_taken = double(endt - start) / double(CLOCKS_PER_SEC);
         total_time+=time_taken;
